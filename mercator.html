@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<!-- Copyright 2018 Colin Maykish. All rights reserved. -->
+
+<html lang="en">
+
+    <head>
+        <meta charset="utf-8">
+        <title>Mercator | cmaykish.com</title>
+        <meta name="description" content="Design log of Mercator robot">
+        <meta name="author" content="Colin Maykish">
+        <link rel="stylesheet" href="css/style.css">
+    </head>
+
+    <body>
+        <h1>colin.maykish</h1>
+        Hobby engineering, programming, and design
+        <hr/>
+
+        <h2>Mercator</h2>
+
+        <p>2018-01-24</p>
+
+        <p>Mercator is the end result of my first foray into robotics construction. It changed form often and dramatically as I learned things the hard way. It is remote-controlled with a custom NRF24L01 radio design and it has some crude ultrasonic distance sensing which it uses to feed data to a web-based control panel for visualizations.</p>
+        <p>It&#8217;s hard to call Mercator a robot, it&#8217;s really more of a slow remote control car with some sensors, but I learned a lot about radio control circuits and the limits of 3D printing along the way.</p>
+        
+        <h3>Hello, World!</h3>
+
+        <p>This is where Mercator started: fully 3D-printed, stepper motors for the drive wheels, some L293 H-bridges, and an Arduino Mega crammed into the arbitrarily-sized body. I quickly realized a few problems at this stage.</p>
+        <ol>
+            <li>The electronics didn&#8217;t fit in the case</li>
+            <li>Stepper motors make terrible drive wheels</li>
+            <li>Some things shouldn&#8217;t be 3D-printed&#8230;</li>
+        </ol>
+        <p>In spite of the glaring design problems, it drove around on the floor and I was pretty excited. I could see the potential.</p>
+
+        <img src="images/site_image-1.jpg">
+        
+        <h3>Baby Steps Forward</h3>
+        <p>After doing the research on robot mechanics that I should have already done, I came to the conclusion (along with the rest of the robotics world) that DC motors and gearboxes are the way to go for drivetrains. I bought this pair of 12v 100RPM gearmotors from <a href="https://www.pololu.com/">Pololu</a> and along with a cheap NiMH battery and L298 breakout board, I had programmable motor control.</p>
+        
+        <img src="images/motors.jpg">
+
+        <h3>Pimp My Robot</h3>
+        <p>The new motors and wheels warranted a new design for the chassis. I decided to forego the boxy design this time. Saving some printer filament and allowing me a bit more flexibility until I settled on the hardware I wanted to include.</p>
+        
+        <img src="images/new-motors.jpg">
+        
+        <h3>In Control</h3>
+        <p>Up to this point, Mercator hadn&#8217;t been under my control or its own. It just drove in a straight line or figure 8. I remedied this with a pair of NRF24L01 radios &#8211; one wired to the Arduino on board and another on a controller I rigged up. This gave me simple tank-style controls and remained as my main method of driving robots for some time.</p>
+        <p>Getting these chips working was a significant effort. A combination of bad parts, shoddy wiring on my end, and out-of-date Arduino code examples turned this into a major debugging effort. I eventually put together a simple Arduino sketch for both the receiver and transmitter side to save myself the hassle of having to relearn this every time I came back to it. <a href="https://github.com/crmaykish/super-simple-rf24-remote-control">That code is available on GitHub</a>.</p>
+        
+        <img src="images/remote.jpg">
+
+        <h3>Green Machine</h3>
+        <p>The third iteration of the Mercator chassis was finally starting to looked planned out instead of hacked together. Most of the components fit inside the outer shell. The caster wheel on the back (yes, that&#8217;s from an office chair) could rotate freely through 360° rather than getting stuck on the tail if it drove in reverse. The body was also parallel with the ground which becomes important later when the sensors get added.</p>
+        <p>Also on display here is the radio control chip. Mercator was now fully controllable from at least 50 feet away (much further depending on interference levels on the 2.4GHz spectrum).</p>
+        <p>One lingering design flaw was the weight distribution. With the heavy motors and battery all the way at the front, the drive torque was enough to flip the robot over if you changed directions from forward to reverse quickly enough.</p>
+        
+        <img src="images/green.jpg">
+        
+        <h3>Metal &gt; Plastic</h3>
+        <p>I &#8220;solved&#8221; the weight distribution problem by replacing the light plastic tail and caster with a huge caster and aluminum tail. This wasn&#8217;t particularly elegant, but it stopped it from flipping over. I also upgraded the wheels once again. They&#8217;re small garden trailer wheels, but they&#8217;re a lot heavier and grippier than the foam wheels. The 100RPM motors are quite torquey for their size and with these wheels, Mercator had no trouble driving smoothly on any surface.</p>
+        <p>Other updates here: top shell hides the internal electronics and provides loads of mounting holes for extra hardware. I also combined the AVR microcontroller, NRF24 radio and some power management onto one board, saving some space and increasing the reliability of my connections compared to breadboarding.</p>
+        
+        <img src="images/new-castor.jpg">
+        
+        <h3>Another Way to Print</h3>
+        <p>About this time I purchased some equipment to etch my own PCBs. This is really nice to do when you&#8217;re sure a design won&#8217;t change. Personally, I don&#8217;t think etching them is worth the hassle for prototypes. I found it was almost always faster just to solder it to perfboard.</p>
+        
+        <img src="images/circuit-board.jpg">
+        
+        <h3>Antennas Just Look Cooler</h3>
+        <p>This is an upgraded version of the main controller board &#8211; bigger AVR chip (ATmega1284P), more pinouts, and I moved the voltage regulators off board (there&#8217;s a dedicated power supply board now). I made two copies because I had started another project by this point with the intention of reusing some of the controller code. That never really happened, but it was good practice making PCBs.</p>
+        
+        <img src="images/control-boards.jpg">
+        
+        <h3>Now With 100% More Internet</h3>
+        <p>Here&#8217;s where Mercator ended up&#8230; After some board upgrades and indecisive wiring, I added some ultrasonic distance sensors and a Raspberry Pi. The sensors were controlled by the microcontroller which reported distance measurements to the Raspberry Pi over a serial connection. Running on the Pi was a small Node.JS application that hosts a webpage where the distances were converted to a visual representation of Mercator&#8217;s position. It was pretty cool to drive around and watch the chart update in real-time. The goal for this was to add in some mapping and positioning abilities, but I didn&#8217;t realize the complexity of that problem or the complete inadequacy of my sensor arrangement to provide that.</p>
+        
+        <img src="images/final-castor.jpg">
+        
+        <h3>Wrapping It Up</h3>
+        <p>Overall, I&#8217;m actually pretty happy with Mercator. It&#8217;s far from perfect; it&#8217;s actually quite broken in many ways, but it taught me so much about a huge array of topics I never would have considered otherwise. It also sparked a new passion and got the ball rolling on so many other ideas. I often find myself learning something cool midway through a project, diving into that rabbit hole a bit further, and ending up half way through another design before I come back around and apply it to the original problem. Or in the case of this project, the list of cool ideas piled up to the point where I just retired it to pursue them with a clean slate. I think that&#8217;s okay though. Not every project has to be completed to be a success.</p>
+
+    </body>
+
+</html>
